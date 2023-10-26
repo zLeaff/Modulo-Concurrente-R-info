@@ -1,0 +1,97 @@
+programa Ej4
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso juntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso areaImparRecorrerAv
+  comenzar
+    repetir 99
+      juntarFlores
+      mover
+    juntarFlores
+  fin
+  proceso areaParRecorrerAv
+  comenzar
+    repetir 99
+      juntarPapeles
+      mover
+    juntarPapeles
+  fin
+  proceso recorrerArea1 (ES av: numero)
+  comenzar
+    mientras (av<25)
+      areaImparRecorrerAv
+      av:= av + 1
+      Pos(av, 1)
+    areaImparRecorrerAv
+  fin
+  proceso recorrerArea2 (ES av: numero)
+  comenzar
+    mientras (av < 50)
+      areaParRecorrerAv
+      av:= av + 1
+      Pos(av, 1)
+    areaParRecorrerAv
+  fin
+  proceso recorrerArea3(ES av: numero)
+  comenzar
+    mientras(av < 75)
+      areaImparRecorrerAv
+      av:= av+1
+      Pos(av, 1)
+    areaImparRecorrerAv  
+  fin
+  proceso recorrerArea4(ES av: numero)
+  comenzar
+    mientras (av<100)
+      areaParRecorrerAv
+      av:= av+1
+      Pos(av,1)
+    areaParRecorrerAv
+  fin
+areas
+  area1: AreaP(1,1,25,100)
+  area2: AreaP(26,1,50,100)
+  area3: AreaP(51,1,75,100)
+  area4: AreaP(76,1,100,100)
+robots
+  robot tipo1
+  variables
+    av: numero
+  comenzar
+    av:= 1
+    recorrerArea1(av)
+    av:= 51
+    Pos(av,1)
+    recorrerArea3(av)
+  fin
+  robot tipo2
+  variables
+    av: numero
+  comenzar
+    av:= 26
+    recorrerArea2(av)
+    av:= 76
+    Pos(av,1)
+    recorrerArea4(av)
+  fin
+variables
+  robot1: tipo1
+  robot2: tipo2
+comenzar
+  AsignarArea(robot1, area1)
+  AsignarArea(robot1, area3)
+  AsignarArea(robot2, area2)
+  AsignarArea(robot2, area4)
+  Iniciar(robot1, 1, 1)
+  Iniciar(robot2, 26,1)
+fin
+
+{Si las areas fuesen 20 se cambiaria, al menos en mi forma de pensar, la cantidad de repeticiones en los recorridos para cambiar de avenidas, y aumentar la cantidad de areas. No se si hay forma de simplificar el codigo}

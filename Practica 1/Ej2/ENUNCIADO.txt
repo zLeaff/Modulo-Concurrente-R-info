@@ -1,0 +1,8 @@
+2) Realice un programa en el que 4 robots limpien de papeles el perímetro de un cuadrado de lado
+20 en sentido horario.
+
+El vértice inferior izquierdo del cuadrado se ubica en la esquina (10,10).
+Al finalizar, cada robot debe informar la cantidad de papeles juntados en su lado.
+Al realizar este programa, analizar:
+a) ¿Cómo deben declararse la o las áreas?
+b) ¿Existe riesgo de colisión?

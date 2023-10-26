@@ -1,0 +1,91 @@
+programa Ej2
+procesos
+  proceso girarIzquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso limpiarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+  proceso recorrerLado(E lado: numero; ES papeles: numero)
+  comenzar
+    papeles:= 0
+    repetir lado
+      limpiarPapeles(papeles)
+      mover
+  fin
+areas
+                {ancho1, largo1, ancho2, largo2}    
+  ciudad1: AreaP(10, 11, 10, 29)
+  ciudad2: AreaP(11, 30, 29, 30)
+  ciudad3: AreaP(30, 11, 30, 29)
+  ciudad4: AreaP(11, 10, 29, 10)
+  esq1: AreaPC(10, 10, 10, 10)
+  esq2: AreaPC(10, 30, 10, 30)
+  esq3: AreaPC(30, 30, 30, 30)
+  esq4: AreaPC(30, 10, 30, 10)
+robots
+  robot tipo1
+  variables
+    p: numero
+  comenzar
+    recorrerLado(20, p)
+    Informar(p)
+  fin
+  robot tipo2
+  variables
+    p: numero
+  comenzar
+    derecha
+    recorrerLado(20, p)
+    Informar(p)
+  fin
+  robot tipo3
+  variables
+    p: numero
+  comenzar
+    repetir 2
+      derecha
+    recorrerLado(20, p)
+    Informar(p)
+  fin
+  robot tipo4
+  variables
+    p: numero
+  comenzar
+    girarIzquierda
+    recorrerLado(20, p)
+    Informar(p)
+  fin
+variables
+  robot1: tipo1
+  robot2: tipo2
+  robot3: tipo3
+  robot4: tipo4
+comenzar
+  AsignarArea(robot1, ciudad1)
+  AsignarArea(robot1, esq1)
+  AsignarArea(robot1, esq2)
+  AsignarArea(robot2, ciudad2)
+  AsignarArea(robot2, esq2)
+  AsignarArea(robot2, esq3)
+  AsignarArea(robot3, ciudad3)
+  AsignarArea(robot3, esq3)
+  AsignarArea(robot3, esq4)
+  AsignarArea(robot4, ciudad4)
+  AsignarArea(robot4, esq4)
+  AsignarArea(robot4, esq1)
+  Iniciar(robot1, 10, 10)
+  Iniciar(robot2, 10, 30)
+  Iniciar(robot3, 30, 30)
+  Iniciar(robot4, 30, 10)
+fin
+{Podria crearse un Area compartida(lo cual puede traer problmas) o 4 areas privadas para cada robot con 4 esquinas parcialmente compartidas}
+{Podria producirse un choque si usamos un Area Compartida, pero en este caso se usaron 4 areas privadas y 4 esquinas pc, por lo tanto no habria choque}
+  
+  
+  
