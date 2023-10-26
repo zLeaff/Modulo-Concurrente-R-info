@@ -20,56 +20,68 @@ procesos
     mientras(HayPapelEnLaBolsa)
       depositarPapel  
   fin
-  proceso recorridoCalle(E long: numero; E av: numero)
+  proceso recorridoCalle(E long: numero)
   comenzar
-    derecha
-    repetir 5
-      repetir long
-        juntarFlores
-        mover
-      depositarFlores
-      Pos(av, PosCa+1)          
+    repetir long-1
+      juntarFlores
+      mover
+    depositarFlores
   fin
   proceso recorridoAvenida(E long: numero; E ca: numero)
   comenzar
-    repetir 5
-      repetir long
-        juntarPapeles
-        mover
+    repetir long-1
       juntarPapeles
-      Pos(PosAv, ca)
-      depositarPapeles
-      Pos(PosAv+1,ca)
+      mover
+    juntarPapeles
+    Pos(PosAv, ca)
+    depositarPapeles
   fin
 areas
-  ciudad: AreaC(1,1,100,100)
+  calle75: AreaP (1, 75, 15, 75)
+  calle80: AreaP(1, 80, 15, 80)
+  avenida75: AreaP(75, 80, 75, 100)
+  avenida80: AreaP(80, 80, 80, 100) 
+  calle10: AreaP(70, 10, 100, 10)
+  calle15: AreaP(70, 15, 100, 15)
+  avenida10: AreaP(10, 1, 10, 10)
+  avenida15: AreaP(15, 1, 15, 10)
 robots
   robot tipo1
   variables
     long: numero
   comenzar
     long:= 15
-    recorridoCalle(long, PosAv)
+    derecha
+    recorridoCalle(long)
+    Pos(1, 80)
+    recorridoCalle(long)
   fin
   robot tipo2
   variables
     long: numero
   comenzar
-    long:= 20
+    long:= 21
+    recorridoAvenida(long, PosCa)
+    Pos(80,80)
     recorridoAvenida(long, PosCa)
   fin
   robot tipo3
   variables
     long: numero
   comenzar
-    long:= 30
-    recorridoCalle(long, PosAv)
+    long:= 31
+    derecha
+    recorridoCalle(long)
+    Pos(70,15)
+    recorridoCalle(long)
   fin
   robot tipo4
   variables
     long: numero
   comenzar
     long:= 10
+    recorridoAvenida(long, PosCa)
+    Pos(15,1)
     recorridoAvenida(long, PosCa)
   fin
 variables
@@ -78,14 +90,16 @@ variables
   robot3: tipo3
   robot4: tipo4
 comenzar
-  AsignarArea(robot1, ciudad)
-  AsignarArea(robot2, ciudad)
-  AsignarArea(robot3, ciudad)
-  AsignarArea(robot4, ciudad)
+  AsignarArea(robot1, calle75)
+  AsignarArea(robot1, calle80)
+  AsignarArea(robot2, avenida75)
+  AsignarArea(robot2, avenida80)
+  AsignarArea(robot3, calle10)
+  AsignarArea(robot3, calle15)
+  AsignarArea(robot4, avenida10)
+  AsignarArea(robot4, avenida15)
   Iniciar(robot1, 1, 75)
   Iniciar(robot2, 75, 80)
   Iniciar(robot3, 70, 10)
   Iniciar(robot4, 10, 1)
 fin
-{No se si el enunciado contempla que el robot recorra la avenida/calle completa y junte en las esquinas solicitadas, pero me parecia un desproposito
-que recorra demas...}
