@@ -1,0 +1,83 @@
+programa Ej2
+procesos
+  proceso Izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores+1
+  fin
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles+1
+  fin
+  proceso EvaluarEscalon(E flores: numero; E papeles: numero; ES cant: numero)
+  comenzar
+    si (flores > papeles)
+      cant:= cant+1
+  fin
+  proceso Escalon(E alto: numero; ES cant: numero)
+  variables
+    flores, papeles: numero
+  comenzar
+    flores:= 0
+    papeles:= 0
+    repetir alto
+      juntarFlores(flores)
+      juntarPapeles(papeles)
+      mover
+    juntarFlores(flores)
+    juntarPapeles(papeles)
+    derecha
+    mover
+    juntarFlores(flores)
+    juntarPapeles(papeles)
+    EvaluarEscalon(flores, papeles, cant)
+  fin
+areas
+  fiscalia: AreaP(1, 1, 1, 1)
+  area1: AreaP(2, 1, 6, 20)
+  area2: AreaP(7, 1, 11, 20)
+  area3: AreaP(12, 1, 16, 20)
+robots
+  robot tipo1
+  variables
+    alto, cant: numero
+  comenzar
+    cant:= 0
+    repetir 4
+      Random(alto, 1, 5)
+      Escalon(alto, cant)
+      Izquierda
+    EnviarMensaje(cant, fisc)
+  fin
+  robot tipo2
+  variables
+    cant, total: numero
+  comenzar
+    repetir 3
+      RecibirMensaje(cant, *)
+      total:= cant+total
+    Informar(total)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  fisc: tipo2
+comenzar
+  AsignarArea(fisc, fiscalia)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  Iniciar(fisc, 1,1)
+  Iniciar(r1, 2, 1)
+  Iniciar(r2, 7 , 1)
+  Iniciar(r3, 12, 1)
+fin
