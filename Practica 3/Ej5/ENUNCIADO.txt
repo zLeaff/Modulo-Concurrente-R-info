@@ -1,0 +1,7 @@
+5- Realice un programa en el que 4 robots juegan una carrera por avenidas diferentes: 4, 6,
+8 y 10 respectivamente. Todos los robots inician en la calle 1.
+Para poder avanzar, cada robot debe juntar un papel de una fuente de papeles localizada
+en la esquina (11,11), colocarlo en la esquina actual de su avenida y avanzar un paso.
+Cuando la esquina fuente ya no tiene más papeles, o cuando se haya completado la
+avenida, deberán avisar al robot coordinador y este determinará el robot que llegó más
+lejos.

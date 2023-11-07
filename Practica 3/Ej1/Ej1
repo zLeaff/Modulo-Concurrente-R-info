@@ -1,0 +1,88 @@
+programa Ej1
+procesos
+  proceso JuntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+areas
+  areaF: AreaPC(1, 1, 5, 10)
+  areaP: AreaPC(6, 1, 10, 9)
+  esquina1: AreaP(6, 10, 6, 10)
+  esquina2: AreaP(7, 10, 7, 10)
+  esquina3: AreaP(8, 10, 8, 10)
+  esquina4: AreaP(9, 10, 9, 10)
+  esquina10: AreaC(10, 10, 10, 10)
+robots
+  robot florero
+  variables
+    avRan, caRan, av, ca: numero
+  comenzar
+    repetir 5 
+      av:= PosAv
+      ca:= PosCa
+      Random(avRan, 1, 5)
+      Random(caRan, 1, 10)
+      BloquearEsquina(avRan, caRan)
+      Pos(avRan, caRan)
+      JuntarFlores
+      Pos(av, ca)
+      LiberarEsquina(avRan, caRan)
+    si(HayFlorEnLaBolsa)
+      BloquearEsquina(10, 10)
+      Pos(10, 10)
+      mientras (HayFlorEnLaBolsa)
+        depositarFlor
+      Pos(av, ca)
+      LiberarEsquina(10, 10)
+  fin
+  robot papelero
+  variables
+    avRan, caRan, av, ca: numero
+  comenzar
+    repetir 3
+      av:= PosAv
+      ca:= PosCa
+      Random(avRan, 6, 10)
+      Random(caRan, 1, 9)
+      BloquearEsquina(avRan, caRan)
+      Pos(avRan, caRan)
+      JuntarPapeles
+      Pos(av, ca)
+      LiberarEsquina(avRan, caRan)
+    si (HayPapelEnLaBolsa)
+      BloquearEsquina(10, 10)
+      Pos(10, 10)
+      mientras (HayPapelEnLaBolsa)
+        depositarPapel
+      Pos(av, ca)
+      LiberarEsquina(10, 10)
+  fin
+variables
+  rf1: florero
+  rf2: florero
+  rp1: papelero
+  rp2: papelero
+comenzar
+  AsignarArea(rf1, esquina1)
+  AsignarArea(rf1, areaF)
+  AsignarArea(rf2, esquina2)
+  AsignarArea(rf2, areaF)
+  AsignarArea(rp1, esquina3)
+  AsignarArea(rp1, areaP)
+  AsignarArea(rp2, esquina4)
+  AsignarArea(rp2, areaP)
+  AsignarArea(rf1, esquina10)
+  AsignarArea(rf2, esquina10)
+  AsignarArea(rp1, esquina10)
+  AsignarArea(rp2, esquina10)
+  Iniciar(rf1, 6, 10)
+  Iniciar(rf2, 7, 10)
+  Iniciar(rp1, 8, 10)
+  Iniciar(rp2, 9, 10)
+fin

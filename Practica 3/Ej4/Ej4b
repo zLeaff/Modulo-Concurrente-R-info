@@ -1,0 +1,93 @@
+programa Ej4b
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  proceso JuntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso TrabajarEsquina(ES hay: boolean)
+  variables
+    avIn, caIn: numero
+  comenzar
+    avIn:= PosAv
+    caIn:= PosCa
+    BloquearEsquina(10, 10)
+    Pos(10, 10)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+    sino
+      hay:= F
+    Pos(avIn, caIn)
+    BloquearEsquina(11, 11)
+    Pos(11, 11)
+    LiberarEsquina(10, 10)
+    si (hay)
+      depositarFlor
+    Pos(avIn, caIn)
+    LiberarEsquina(11, 11)
+  fin
+areas
+  esq10: AreaPC(10, 10, 10, 10)
+  esq11: AreaPC(11, 11, 11, 11)
+  areaR1: AreaP(9, 9, 9, 9)
+  areaR2: AreaP(9, 10, 9, 10)
+  areaR3: AreaP(9, 11, 9, 11)
+  areaR4: AreaP(9, 12, 9, 12)
+  fiscalia: AreaP(1, 1, 1, 1)
+robots
+  robot florero
+  variables
+    id: numero
+    hay: boolean
+  comenzar
+    RecibirMensaje(id, fisc)
+    hay:= V
+    mientras(hay)
+      TrabajarEsquina(hay)
+    EnviarMensaje(id, fisc)
+  fin
+  robot fiscalizador
+  variables
+    id: numero
+  comenzar
+    Identificar
+    repetir(4)
+      RecibirMensaje(id, *)
+    Informar(id)
+    Pos(11, 11)
+    JuntarFlores
+  fin
+variables
+  r1: florero
+  r2: florero
+  r3: florero
+  r4: florero
+  fisc: fiscalizador
+comenzar
+  AsignarArea(r1, areaR1)
+  AsignarArea(r1, esq10)
+  AsignarArea(r1, esq11)
+  AsignarArea(r2, areaR2)
+  AsignarArea(r2, esq10)
+  AsignarArea(r2, esq11)
+  AsignarArea(r3, areaR3)
+  AsignarArea(r3, esq10)
+  AsignarArea(r3, esq11)
+  AsignarArea(r4, areaR4)
+  AsignarArea(r4, esq10)
+  AsignarArea(r4, esq11)
+  AsignarArea(fisc, fiscalia)
+  AsignarArea(fisc, esq11)
+  Iniciar(fisc, 1, 1)
+  Iniciar(r1, 9, 9)
+  Iniciar(r2, 9, 10)
+  Iniciar(r3, 9, 11)
+  Iniciar(r4, 9, 12)
+fin

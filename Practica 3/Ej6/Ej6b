@@ -1,0 +1,172 @@
+programa Ej6b
+procesos
+  proceso JuntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso CuadranteF
+  variables
+    ant: numero
+  comenzar
+    repetir(2)
+      repetir(6)
+        ant:= PosCa
+        JuntarFlores
+        BloquearEsquina(PosAv,PosCa+1)
+        mover
+        LiberarEsquina(PosAv,ant)
+      derecha
+      repetir(6)
+        ant:= PosAv
+        JuntarFlores
+        BloquearEsquina(PosAv+1, PosCa)
+        mover
+        LiberarEsquina(ant, PosCa)
+      derecha
+      JuntarFlores
+  fin
+  proceso CuadranteP
+  variables
+    ant: numero
+  comenzar
+    repetir(2)
+      repetir(10)
+        ant:= PosCa
+        JuntarPapeles
+        BloquearEsquina(PosAv, PosCa+1)
+        mover
+        LiberarEsquina(PosAv, ant)
+      derecha
+      repetir(10)
+        ant:= PosAv
+        JuntarPapeles
+        BloquearEsquina(PosAv+1, PosCa)
+        mover
+        LiberarEsquina(ant, PosCa)
+      derecha
+      JuntarPapeles
+  fin
+  proceso CuadranteFP
+  variables
+    ant: numero
+  comenzar
+    repetir(2)
+      repetir(7)
+        ant:= PosCa
+        JuntarFlores
+        JuntarPapeles
+        BloquearEsquina(PosAv, PosCa+1)
+        mover
+        LiberarEsquina(PosAv, ant)
+      derecha
+      repetir(7)
+        ant:= PosAv
+        JuntarFlores
+        JuntarPapeles
+        BloquearEsquina(PosAv, PosCa+1)
+        mover
+        LiberarEsquina(ant, PosCa)
+      derecha
+      JuntarFlores
+      JuntarPapeles
+  fin
+areas
+  cuadrante: AreaPC(2, 2, 16, 16)
+  fiscalia: AreaP(1, 1, 1, 1)
+  calle20: AreaPC(1, 20, 100, 20)
+  calle21: AreaPC(1, 21, 100, 21)
+  calle22: AreaPC(1, 22, 100, 22)
+robots
+  robot fiscalizador
+  variables
+    id, calle: numero
+    terminado: boolean
+  comenzar
+    terminado:= F
+    RecibirMensaje(terminado, r1)
+    RecibirMensaje(terminado, r2)
+    RecibirMensaje(terminado, r3)
+    si(terminado)
+      EnviarMensaje(20, r1)
+      EnviarMensaje(21, r2)
+      EnviarMensaje(22, r3)
+  fin
+  robot florero
+  variables
+    id, ca: numero
+    termine: boolean
+  comenzar
+    termine:= F
+    CuadranteF
+    termine:= V
+    EnviarMensaje(termine, fisc)
+    RecibirMensaje(ca, fisc)
+    Pos(1, ca)
+    derecha
+    mientras((HayFlorEnLaBolsa) & (PosAv<100))
+      depositarFlor
+      mover
+  fin
+  robot papelero
+  variables
+    id, ca: numero
+    termine: boolean
+  comenzar
+    termine:= F
+    CuadranteP
+    termine:= V
+    EnviarMensaje(termine, fisc)
+    RecibirMensaje(ca, fisc)
+    Pos(1, ca)
+    derecha
+    mientras((HayPapelEnLaBolsa) & (PosAv<100))
+      depositarPapel
+      mover
+  fin
+  robot recolector
+  variables
+    id, ca: numero
+    termine: boolean
+  comenzar
+    termine:= F
+    CuadranteFP
+    termine:= V
+    EnviarMensaje(termine, fisc)
+    RecibirMensaje(ca, fisc)
+    Pos(1, ca)
+    derecha
+    mientras((HayPapelEnLaBolsa) & (HayFlorEnLaBolsa) & (PosAv<100))
+      depositarFlor
+      depositarPapel
+      mover
+  fin
+variables
+  r1: florero
+  r2: papelero
+  r3: recolector
+  fisc: fiscalizador
+comenzar
+  AsignarArea(r1, cuadrante)
+  AsignarArea(r1, calle20)
+  AsignarArea(r1, calle21)
+  AsignarArea(r1, calle22)
+  AsignarArea(r2, cuadrante)
+  AsignarArea(r2, calle20)
+  AsignarArea(r2, calle21)
+  AsignarArea(r2, calle22)
+  AsignarArea(r3, cuadrante)
+  AsignarArea(r3, calle20)
+  AsignarArea(r3, calle21)
+  AsignarArea(r3, calle22)
+  AsignarArea(fisc, fiscalia)
+  Iniciar(r1, 2, 2)
+  Iniciar(r2, 5, 5)
+  Iniciar(r3, 9, 9)
+  Iniciar(fisc, 1, 1)
+fin

@@ -1,0 +1,113 @@
+programa Ej3
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  proceso Maximo(E flores: numero; E id: numero; ES idMax: numero; ES max: numero)
+  comenzar
+    si (flores > max)
+      max:= flores
+      idMax:= id
+  fin
+  proceso Ubicar
+  variables
+    av, ca: numero
+  comenzar
+    Random(av, 2, 10)
+    Random(ca, 2, 10)
+    EnviarMensaje(av, r1)
+    EnviarMensaje(ca, r1)
+    EnviarMensaje(av, r2)
+    EnviarMensaje(ca, r2)
+    EnviarMensaje(av, r3)
+    EnviarMensaje(ca, r3)
+    EnviarMensaje(av, r4)
+    EnviarMensaje(ca, r4)
+  fin
+  proceso RealizarEsquina(E avIn: numero; E caIn: numero; E av: numero; E ca: numero; ES flores: numero; ES hay: boolean)
+  comenzar
+    BloquearEsquina(av, ca)
+    Pos(av, ca)
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+    sino
+      hay:= F
+    Pos(avIn, caIn)
+    LiberarEsquina(av, ca)
+  fin
+areas
+  cuadrante: AreaC(2, 2, 10, 10)
+  fiscalia: AreaP(1, 1, 1, 1)
+  area1: AreaP(2, 1, 2, 1)
+  area2: AreaP(3, 1, 3, 1)
+  area3: AreaP(4, 1, 4, 1)
+  area4: AreaP(5, 1, 5, 1)
+robots
+  robot florero
+  variables
+    id, av, ca, avIn, caIn: numero
+    flores: numero
+    hay: boolean
+  comenzar
+    flores:= 0
+    hay:= V
+    avIn:= PosAv
+    caIn:= PosCa
+    RecibirMensaje(id, fisc)
+    RecibirMensaje(av, fisc)
+    RecibirMensaje(ca, fisc)
+    mientras(hay)
+      RealizarEsquina(avIn, caIn, av, ca, flores, hay)
+    EnviarMensaje(id, fisc)
+    EnviarMensaje(flores, fisc)
+  fin
+  robot fiscalizador
+  variables
+    max, idMax, id, flores: numero
+  comenzar
+    Identificar
+    max:= -1
+    idMax:= -1
+    Ubicar
+    repetir(4)
+      RecibirMensaje(id, *)
+      si(id = 1)
+        RecibirMensaje(flores, r1)
+      sino
+        si(id = 2)
+          RecibirMensaje(flores, r2)
+        sino
+          si(id = 3)
+            RecibirMensaje(flores, r3)
+          sino
+            RecibirMensaje(flores, r4)
+      Maximo(flores, id, idMax, max)
+    Informar(idMax)
+  fin
+variables
+  r1: florero
+  r2: florero
+  r3: florero
+  r4: florero
+  fisc: fiscalizador
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r1, cuadrante)
+  AsignarArea(r2, area2)
+  AsignarArea(r2, cuadrante)
+  AsignarArea(r3, area3)
+  AsignarArea(r3, cuadrante)
+  AsignarArea(r4, area4)
+  AsignarArea(r4, cuadrante)
+  AsignarArea(fisc, fiscalia)
+  Iniciar(fisc, 1, 1)
+  Iniciar(r1, 2, 1)
+  Iniciar(r2, 3, 1)
+  Iniciar(r3, 4, 1)
+  Iniciar(r4, 5, 1)
+fin

@@ -1,0 +1,96 @@
+programa Ej5
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  proceso JuntarPapel(ES hay: boolean)
+  variables
+    av, ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    BloquearEsquina(11, 11)
+    Pos(11, 11)
+    si(HayPapelEnLaEsquina)
+      tomarPapel
+    sino
+      hay:= F
+    Pos(av, ca)
+    LiberarEsquina(11, 11)
+  fin
+  proceso Maximo(E pasos: numero; E id: numero; ES maxPasos: numero; ES maxId: numero)
+  comenzar
+    si(pasos > maxPasos)
+      maxPasos:= pasos
+      maxId:= id
+  fin
+areas
+  avenida4: AreaP(4, 1, 4, 100)
+  avenida6: AreaP(6, 1, 6, 100)
+  avenida8: AreaP(8, 1, 8, 100)
+  avenida10: AreaP(10, 1, 10, 100)
+  papeleria: AreaPC(11, 11, 11, 11)
+  fiscalia: AreaP(1, 1, 1, 1)
+robots
+  robot corredor
+  variables
+    id, pasos: numero
+    hay: boolean
+  comenzar
+    RecibirMensaje(id, fisc)
+    hay:= V
+    pasos:= 0
+    mientras(hay) & (PosCa < 100)
+      JuntarPapel(hay)
+      si(hay)
+        depositarPapel
+        mover
+        pasos:= pasos + 1
+    EnviarMensaje(id, fisc)
+    EnviarMensaje(pasos, fisc)
+  fin
+  robot fiscalizador
+  variables
+    id, pasos, maxPasos, maxId: numero
+  comenzar
+    Identificar
+    maxPasos:= -1
+    maxId:= -1
+    repetir(4)
+      RecibirMensaje(id, *)
+      si(id = 1)
+        RecibirMensaje(pasos, r1)
+      sino
+        si(id = 2)
+          RecibirMensaje(pasos, r2)
+        sino
+          si(id = 3)
+            RecibirMensaje(pasos, r3)
+          sino
+            RecibirMensaje(pasos, r4)
+      Maximo(pasos, id, maxPasos, maxId)
+    Informar(maxId)
+  fin
+variables
+  r1, r2, r3, r4: corredor
+  fisc: fiscalizador
+comenzar
+  AsignarArea(r1, avenida4)
+  AsignarArea(r1, papeleria)
+  AsignarArea(r2, avenida6)
+  AsignarArea(r2, papeleria)
+  AsignarArea(r3, avenida8)
+  AsignarArea(r3, papeleria)
+  AsignarArea(r4, avenida10)
+  AsignarArea(r4, papeleria)
+  AsignarArea(fisc, fiscalia)
+  Iniciar(r1, 4, 1)
+  Iniciar(r2, 6, 1)
+  Iniciar(r3, 8, 1)
+  Iniciar(r4, 10, 1)
+  Iniciar(fisc, 1, 1)
+fin
