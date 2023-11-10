@@ -1,0 +1,93 @@
+programa Ej3b
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+  proceso JuntarPapeles(E limite: numero; ES ok: boolean)
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    mientras((HayPapelEnLaEsquina) & (papeles<limite))
+      tomarPapel
+      papeles:= papeles + 1
+    si(papeles = limite)
+      ok:= V
+  fin
+  proceso Etapa(ES ok: boolean)
+  variables
+    limite: numero
+  comenzar
+    Random(limite, 1, 5)
+    JuntarPapeles(limite, ok)
+    si(ok)
+      mover
+  fin
+  proceso InformarEtapa(E id: numero; ES terminada: boolean)
+  comenzar
+    si(id = 1)
+      terminada:= V
+      EnviarMensaje(terminada, r2)
+      EnviarMensaje(terminada, r3)
+    sino
+      si(id = 2)
+        terminada:= V
+        EnviarMensaje(terminada, r1)
+        EnviarMensaje(terminada, r3)
+      sino
+        terminada:= V
+        EnviarMensaje(terminada, r1)
+        EnviarMensaje(terminada, r2)
+  fin
+  proceso RecibirInforme(E id: numero; E terminada: boolean)
+  comenzar
+    si(id = 1)
+      RecibirMensaje(terminada, r2)
+      RecibirMensaje(terminada, r3)
+    sino
+      si(id = 2)
+        RecibirMensaje(terminada, r1)
+        RecibirMensaje(terminada, r3)
+      sino
+        RecibirMensaje(terminada, r1)
+        RecibirMensaje(terminada, r2)
+  fin
+areas
+  avenida1: AreaP(1, 1, 1, 100)
+  avenida2: AreaP(2, 1, 2, 100)
+  avenida3: AreaP(3, 1, 3, 100)
+  fiscalia: AreaP(100, 100, 100, 100)
+robots
+  robot fiscalizador
+  comenzar
+    Identificar
+  fin
+  robot papelero
+  variables
+    id: numero
+    terminada: boolean
+  comenzar
+    RecibirMensaje(id, fisc)
+    mientras((HayPapelEnLaEsquina) & (PosCa<100))
+      terminada:= F
+      Etapa(terminada)
+      si(terminada)
+        InformarEtapa(id, terminada)
+        RecibirInforme(id, terminada)
+  fin
+variables
+  r1, r2, r3: papelero
+  fisc: fiscalizador
+comenzar
+  AsignarArea(r1, avenida1)
+  AsignarArea(r2, avenida2)
+  AsignarArea(r3, avenida3)
+  AsignarArea(fisc, fiscalia)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 2, 1)
+  Iniciar(r3, 3, 1)
+  Iniciar(fisc, 100, 100)
+fin

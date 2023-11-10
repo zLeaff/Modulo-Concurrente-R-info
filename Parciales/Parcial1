@@ -1,0 +1,166 @@
+programa Parcial
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  proceso JuntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso JuntarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+  proceso JuntarFyP(ES flores: numero; ES papeles: numero)
+  comenzar
+    JuntarFlores(flores)
+    JuntarPapeles(papeles)
+  fin
+  proceso LadoHorizontal(E long: numero; ES flores: numero; ES papeles: numero)
+  variables
+    av, ca, avSig: numero
+  comenzar
+    repetir(long)
+      ca:= PosCa
+      av:= PosAv
+      avSig:= PosAv+1
+      BloquearEsquina(avSig, ca)
+      JuntarFyP(flores, papeles)
+      mover
+      LiberarEsquina(av, ca)
+    JuntarFyP(flores, papeles)      
+  fin
+  proceso LadoVertical(E long: numero; ES flores: numero; ES papeles: numero)
+  variables
+    av, caSig, ca: numero
+  comenzar
+    repetir(long)
+      av:= PosAv
+      caSig:= PosCa+1
+      ca:= PosCa
+      BloquearEsquina(av, caSig)
+      JuntarFyP(flores, papeles)
+      mover
+      LiberarEsquina(av, ca)
+    JuntarFyP(flores, papeles)
+  fin
+  proceso Rectangulo(E ancho: numero; E alto: numero; ES flores: numero; ES papeles: numero)
+  comenzar
+    repetir 2
+      LadoVertical(alto, flores, papeles)
+      derecha
+      LadoHorizontal(ancho, flores, papeles)
+      derecha
+  fin
+areas
+  inicio1: AreaP(20, 1, 20, 1)
+  inicio2: AreaP(20, 2, 20, 2)
+  inicio3: AreaP(20, 3, 20, 3)
+  inicio4: AreaP(20, 4, 20, 4)  
+  area1: AreaP(1, 2, 9, 4)
+  area2: AreaP(1, 6, 9, 8)
+  area3: AreaP(2, 1, 4, 9)
+  area4: AreaP(6, 1, 8, 9)
+  jefatura: AreaP(20, 15, 20, 15)
+robots
+  robot trabajador
+  variables
+    id, flores, papeles: numero
+    av, ca: numero
+  comenzar
+    RecibirMensaje(id, rjf)
+    flores:= 0
+    papeles:= 0
+    av:= PosAv
+    ca:= PosCa
+    si(id = 1)
+      BloquearEsquina(1, 2)
+      Pos(1, 2)
+      Rectangulo(8, 2, flores, papeles)
+      Pos(av, ca)
+      LiberarEsquina(1, 2)
+    sino
+      si(id = 2)
+        BloquearEsquina(1, 6)
+        Pos(1, 6)
+        Rectangulo(8, 2, flores, papeles)
+        Pos(av, ca)
+        LiberarEsquina(1, 6)
+      sino
+        si(id = 3)
+          BloquearEsquina(2, 1)
+          Pos(2, 1)
+          Rectangulo(2, 8, flores, papeles)
+          Pos(av, ca)
+          LiberarEsquina(2, 1)
+        sino
+          BloquearEsquina(6, 1)
+          Pos(6, 1)
+          Rectangulo(2, 8, flores, papeles)
+          Pos(av, ca)
+          LiberarEsquina(6, 1)
+    EnviarMensaje(id, rjf)
+    EnviarMensaje(flores, rjf)
+    EnviarMensaje(papeles, rjf)      
+  fin
+  robot jefe
+  variables
+    id, materiales, flores, papeles: numero
+  comenzar
+    Identificar
+    flores:= 0
+    papeles:= 0
+    repetir(4)
+      RecibirMensaje(id, *)
+      si(id = 1)
+        RecibirMensaje(materiales, r1)
+        flores:= flores + materiales
+        RecibirMensaje(materiales, r1)
+        papeles:= papeles + materiales
+      sino
+        si(id = 2)
+          RecibirMensaje(materiales, r2)
+          flores:= flores + materiales
+          RecibirMensaje(materiales, r2)
+          papeles:= papeles + materiales
+        sino
+          si(id = 3)
+            RecibirMensaje(materiales, r3)
+            flores:= flores + materiales
+            RecibirMensaje(materiales, r3)
+            papeles:= papeles + materiales
+          sino
+            RecibirMensaje(materiales, r4)
+            flores:= flores + materiales
+            RecibirMensaje(materiales, r4)
+            papeles:= papeles + materiales
+    Informar('Flores', flores)
+    Informar('Papeles', papeles)
+  fin
+variables
+  r1, r2, r3, r4: trabajador
+  rjf: jefe
+comenzar
+  AsignarArea(r1, inicio1)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, inicio2)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, inicio3)
+  AsignarArea(r3, area3)
+  AsignarArea(r4, inicio4)
+  AsignarArea(r4, area4)
+  AsignarArea(rjf, jefatura)
+  Iniciar(r1, 20, 1)
+  Iniciar(r2, 20, 2)
+  Iniciar(r3, 20, 3)
+  Iniciar(r4, 20, 4)
+  Iniciar(rjf, 20, 15)
+fin

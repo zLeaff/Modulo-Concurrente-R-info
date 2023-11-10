@@ -1,0 +1,109 @@
+programa Ej2
+procesos
+  proceso JuntarPapeles(ES papeles: numero)
+  comenzar
+    mientras((HayPapelEnLaEsquina) & (papeles < 5))
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+  proceso Depositar
+  variables
+    av, ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    BloquearEsquina(50, 50)
+    Pos(50, 50)
+    repetir(5)
+      depositarPapel
+    Pos(av, ca)
+    LiberarEsquina(50, 50)
+  fin
+  proceso Avenida(ES papeles: numero)
+  comenzar
+    repetir(99)
+      mientras(HayPapelEnLaEsquina)
+        JuntarPapeles(papeles)
+        si(papeles = 5)
+          Depositar
+          papeles:= 0
+      mover
+    mientras(HayPapelEnLaEsquina)
+      JuntarPapeles(papeles)
+      si(papeles = 5)
+        Depositar
+        papeles:= 0
+  fin
+  proceso Contar(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+    repetir(papeles)
+      depositarPapel
+  fin
+  proceso JuntarPapelRandom(E cant: numero)
+  comenzar
+    repetir(cant)
+      tomarPapel
+  fin
+  proceso DepositarPapelRandom(E cant: numero)
+  comenzar
+    repetir(cant)
+      depositarPapel
+  fin
+areas
+  esq50: AreaPC(50, 50, 50, 50)
+  avenida5: AreaP(5, 1, 5, 100)
+  avenida10: AreaP(10, 1, 10, 100)
+  area1: AreaP(11, 1, 11, 1)
+  area2: AreaP(12, 1, 12, 1)
+robots
+  robot recolector
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    Avenida(papeles)
+  fin
+  robot consumidor
+  variables
+    intentos, papeles, contador: numero
+    av, ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    intentos:= 0
+    mientras(intentos < 8)
+      contador:= 0
+      Random(papeles, 2, 5)
+      BloquearEsquina(50, 50)
+      Pos(50, 50)
+      Contar(contador)
+      si(contador >= papeles)
+        JuntarPapelRandom(papeles)
+        Pos(av, ca)
+        LiberarEsquina(50,50)
+        DepositarPapelRandom(papeles)
+      sino
+        Pos(av, ca)
+        LiberarEsquina(50, 50)
+        intentos:= intentos + 1
+  fin
+variables
+  r1, r2: recolector
+  c1, c2: consumidor
+comenzar
+  AsignarArea(r1, avenida5)
+  AsignarArea(r1, esq50)
+  AsignarArea(r2, avenida10)
+  AsignarArea(r2, esq50)
+  AsignarArea(c1, area1)
+  AsignarArea(c1, esq50)
+  AsignarArea(c2, area2)
+  AsignarArea(c2, esq50)
+  Iniciar(r1, 5, 1)
+  Iniciar(r2, 10, 1)
+  Iniciar(c1, 11, 1)
+  Iniciar(c2, 12, 1)
+fin

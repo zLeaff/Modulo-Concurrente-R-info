@@ -1,0 +1,11 @@
+1- Clientes y Servidores
+Existe un robot que sirve de flores a tres robots clientes. Cada cliente solicita al servidor que
+le deposite en su esquina siguiente una cantidad de flores aleatoria (entre 1 y 4). Por
+ejemplo, si el cliente se encuentra en la esquina (2,1) le solicitará que coloque x cantidad de
+flores en la esquina (2,2).
+Cuando el robot servidor deposita las flores en la esquina solicitada, el cliente las junta y las
+deposita una a una a lo largo de la avenida en la que se encuentra.
+El programa finaliza cuando todos los robos clientes completan su avenida. Asuma que el
+robot servidor tiene flores suficientes en su bolsa.
+El robot servidor se inicia en la esquina (100,100)
+Los robots clientes inician en las esquinas (1,1) , (2,1) y (3,1) respectivamente

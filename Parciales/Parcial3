@@ -1,0 +1,116 @@
+programa Parcial
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+  proceso Posicionar
+  variables
+    av: numero
+  comenzar
+    Random(av, 1, 7)
+    EnviarMensaje(av, r1)
+    Random(av, 8, 14)
+    EnviarMensaje(av, r2)
+    Random(av, 15, 21)
+    EnviarMensaje(av, r3)
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso DepositarPapeles(E av: numero; E ca: numero)
+  comenzar
+    BloquearEsquina(1, 30)
+    Pos(1, 30)
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+    Pos(av, ca)
+    LiberarEsquina(1, 30)
+  fin
+  proceso RecorrerAvenida(E pasos: numero)
+  variables
+    contador: numero
+  comenzar
+    contador:= 0
+    mientras((contador < pasos) & (PosCa<40))
+      JuntarPapeles
+      BloquearEsquina(PosAv, PosCa+1)
+      mover
+      LiberarEsquina(PosAv, PosCa - 1)
+      contador:= contador + 1
+    JuntarPapeles
+  fin
+  proceso Maximo(E id: numero; E pasos: numero; ES idMax: numero; ES pasosMax: numero)
+  comenzar
+    si(pasos > pasosMax)
+      idMax:= id
+      pasosMax:= pasos
+  fin
+areas
+  cuadrante: AreaPC(1, 1, 21, 40)
+  fiscalia: AreaP(25, 1, 25, 1)
+robots
+  robot fiscalizador
+  variables
+    id, pasos, pasosRand, pasosMax, idMax: numero
+  comenzar
+    Identificar
+    Posicionar
+    pasosMax:= -1
+    idMax:= -1
+    repetir(5)
+      Random(pasosRand, 1, 10)
+      EnviarMensaje(pasosRand, r1)
+      Random(pasosRand, 1, 10)
+      EnviarMensaje(pasosRand, r2)
+      Random(pasosRand, 1, 10)
+      EnviarMensaje(pasosRand, r3)
+    repetir(3)
+      RecibirMensaje(id, *)
+      si(id = 1)
+        RecibirMensaje(pasos, r1)
+      sino
+        si(id = 2)
+          RecibirMensaje(pasos, r2)
+        sino
+          RecibirMensaje(pasos, r3)
+      Maximo(id, pasos, idMax, pasosMax)
+    Informar(idMax)
+  fin
+  robot papelero
+  variables
+    id, pasos, pasosTotales: numero
+    av, ca, caUlt, avRand: numero
+  comenzar
+    RecibirMensaje(id, fisc)
+    RecibirMensaje(avRand, fisc)
+    Pos(avRand, 1)
+    av:= PosAv
+    ca:= PosCa
+    repetir(5)
+      RecibirMensaje(pasos, fisc)
+      pasosTotales:= pasosTotales + pasos
+      RecorrerAvenida(pasos)
+    caUlt:= PosCa
+    DepositarPapeles(av, ca)
+    LiberarEsquina(1, caUlt)
+    EnviarMensaje(id, fisc)
+    EnviarMensaje(pasosTotales, fisc)
+  fin
+variables
+  r1, r2, r3: papelero
+  fisc: fiscalizador
+comenzar
+  AsignarArea(r1, cuadrante)
+  AsignarArea(r2, cuadrante)
+  AsignarArea(r3, cuadrante)
+  AsignarArea(fisc, fiscalia)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 8, 1)
+  Iniciar(r3, 15, 1)
+  Iniciar(fisc, 25, 1)
+fin

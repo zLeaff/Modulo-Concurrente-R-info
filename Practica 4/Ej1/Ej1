@@ -1,0 +1,118 @@
+programa Ej1
+procesos
+  proceso Identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+  proceso JuntarFlores(E flores: numero)
+  comenzar
+    repetir flores
+      tomarFlor
+  fin
+  proceso DejarFlores(E flores: numero)
+  comenzar
+    repetir(flores)
+      depositarFlor
+  fin
+  proceso DepositarAvanzar(E flores: numero)
+  comenzar
+    mientras((flores > 0) & (PosCa < 100))
+      depositarFlor
+      mover
+      flores:= flores -1
+    si((flores > 0) &(PosCa = 100))
+      depositarFlor
+  fin
+areas
+  esq100: AreaP(100, 100, 100, 100)
+  area1: AreaPC(1, 1, 1, 100)
+  area2: AreaPC(2, 1, 2, 100)
+  area3: AreaPC(3, 1, 3, 100)
+robots
+  robot cliente
+  variables
+    id, flores, av, ca, caSig: numero
+    ok: boolean
+  comenzar
+    ok:= F
+    RecibirMensaje(id, serv)
+    mientras(PosCa < 100)
+      av:= PosAv
+      caSig:= PosCa+1
+      Random(flores, 1, 4)
+      EnviarMensaje(id, serv)
+      EnviarMensaje(flores, serv)
+      EnviarMensaje(av, serv)
+      EnviarMensaje(caSig, serv)
+      RecibirMensaje(ok, serv)
+      si(ok)
+        av:= PosAv
+        ca:= PosCa
+        Pos(av, caSig)
+        JuntarFlores(flores)
+        Pos(av, ca)
+        DepositarAvanzar(flores)
+    id:= 0
+    EnviarMensaje(id, serv)
+  fin
+  robot servidor
+  variables
+    id, av, ca, flores, floresBolsa: numero
+    finalistas: numero
+    ok: boolean
+  comenzar
+    Identificar
+    finalistas:= 0
+    mientras((finalistas < 3) & (HayFlorEnLaBolsa))
+      ok:= F
+      RecibirMensaje(id, *)
+      si(id = 1)
+        RecibirMensaje(flores, r1)
+        RecibirMensaje(av, r1)
+        RecibirMensaje(ca, r1)
+        Pos(av, ca)
+        DejarFlores(flores)
+        Pos(100, 100)
+        ok:= V
+        EnviarMensaje(ok, r1)
+      sino
+        si(id = 2)
+          RecibirMensaje(flores, r2)
+          RecibirMensaje(av, r2)
+          RecibirMensaje(ca, r2)
+          Pos(av, ca)
+          DejarFlores(flores)
+          Pos(100, 100)
+          ok:= V
+          EnviarMensaje(ok, r2)
+        sino
+          si(id = 3)
+            RecibirMensaje(flores, r3)
+            RecibirMensaje(av, r3)
+            RecibirMensaje(ca, r3)
+            Pos(av, ca)
+            DejarFlores(flores)
+            Pos(100, 100)
+            ok:= V
+            EnviarMensaje(ok, r3)
+          sino
+            finalistas:= finalistas + 1        
+  fin
+variables
+  r1, r2, r3: cliente
+  serv: servidor
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(serv, esq100)
+  AsignarArea(serv, area1)
+  AsignarArea(serv, area2)
+  AsignarArea(serv, area3)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 2, 1)
+  Iniciar(r3, 3, 1)
+  Iniciar(serv, 100, 100)
+fin
